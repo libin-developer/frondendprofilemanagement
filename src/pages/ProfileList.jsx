@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import tampi from "../assets/tami.png";
 import prime from "../assets/primes.png";
 import acss from "../assets/Acss.png";
 
-
 export default function ProfileList() {
   const [profiles, setProfiles] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -24,7 +25,6 @@ export default function ProfileList() {
 
   return (
     <div className="min-h-screen bg-white p-8">
-      
       <div className="flex justify-between items-center mb-14">
         <img src={tampi} alt="TAPMI" className="h-16 object-contain" />
 
@@ -34,15 +34,13 @@ export default function ProfileList() {
         </div>
       </div>
 
-      
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-10 gap-y-12 justify-items-center">
         {profiles.map((profile, index) => (
           <div
             key={index}
             className="bg-white w-72 rounded-xl shadow-lg overflow-hidden cursor-pointer hover:scale-105 transform transition"
-            onClick={() => (window.location.href = `/profile/${profile.id}`)}
+            onClick={() => navigate(`/profile/${profile.id}`)}
           >
-            
             <div className="bg-orange-500 h-32 flex justify-center items-end">
               <img
                 src={profile.avatar}
@@ -51,13 +49,11 @@ export default function ProfileList() {
               />
             </div>
 
-            
             <div className="pt-16 pb-6 text-center">
               <h2 className="text-xl font-bold">{profile.name}</h2>
               <p className="text-gray-600">
                 {profile.gender} | {profile.age} | {profile.pronouns}
               </p>
-           
             </div>
           </div>
         ))}
