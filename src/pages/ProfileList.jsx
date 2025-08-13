@@ -7,9 +7,15 @@ import acss from "../assets/Acss.png";
 
 export default function ProfileList() {
   const [profiles, setProfiles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [seconds, setSeconds] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
+    let timer = setInterval(() => {
+      setSeconds((s) => s + 1);
+    }, 1000);
+
     axios
       .get("https://appforprofilemanagement.onrender.com")
       .then((res) => {
@@ -20,14 +26,30 @@ export default function ProfileList() {
           setProfiles(res.data);
         }
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error(err))
+      .finally(() => {
+        setLoading(false);
+        clearInterval(timer);
+      });
+
+    return () => clearInterval(timer);
   }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-white">
+        <h2 className="text-2xl font-bold text-orange-500">Loading Profiles...</h2>
+        <p className="text-gray-600 mt-2">
+          Backend waking up, please wait {seconds} seconds
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white p-8">
       <div className="flex justify-between items-center mb-14">
         <img src={tampi} alt="TAPMI" className="h-16 object-contain" />
-
         <div className="flex gap-6">
           <img src={prime} alt="PRME" className="h-12 object-contain" />
           <img src={acss} alt="AACSB" className="h-12 object-contain" />
